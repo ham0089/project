@@ -6,30 +6,43 @@
     <title>Secondpage</title>
     <link rel="stylesheet" href="secondpage.css">
 </head>
-<header>
-    <div>
-        <a href="Index.html" class="logo"> <span>PSU</span>Thesis</a>
-        <div class="input-box">
-            <input type="search" placeholder="">
-            <button>Search</button>
+<body>
+    <div class="sidebar">
+        <h3>Filters</h3>
+        <ul>
+            <li><a href="#">Any time</a></li>
+            <li><a href="#">Since 2025</a></li>
+            <li><a href="#">Since 2024</a></li>
+            <li><a href="#">Since 2021</a></li>
+        </ul>
+        <h3>Custom range</h3>
+        <div class="custom-range">
+            <label for="start-year">From:</label>
+            <input type="number" id="start-year" placeholder="YYYY">
+            <label for="end-year">To:</label>
+            <input type="number" id="end-year" placeholder="YYYY">
+            <button onclick="searchCustomRange()">Search</button>
+        </div>
+        <h3>Sort by</h3>
+        <ul>
+            <li><a href="#">Relevance</a></li>
+            <li><a href="#">Date</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <input type="text" class="search-bar" placeholder="Search PSU Article">
+        <div class="article">
+            <a href="#">Artificial Intelligence in Medicine</a>
+            <p>J Holmes, L Sacchi, R Bellazzi - Ann R Coll Surg Engl, 2004 - Springer</p>
+        </div>
+        <div class="article">
+            <a href="#">Quo vadis artificial intelligence?</a>
+            <p>Y Jiang, X Li, H Luo, S Yin, O Kaynak - Discover AI, 2022 - Springer</p>
+        </div>
+        <div class="article">
+            <a href="#">What is artificial intelligence?</a>
+            <p>JH Fetzer - Artificial Intelligence: Its scope and limits, 1990 - Springer</p>
         </div>
     </div>
-</header>
-<body>
-    <div>
-        <nav>
-            <a href="#">Any time</a>
-            <a href="#">Since 2015</a>
-            <a href="#">Since 2014</a>
-            <a href="#">Since 2012</a>
-            <a href="#" id="search-text" class="search-text">Custom range</a>
-            <div id="search-popup" class="search-popup">
-                <input type="text" id="search-input" placeholder="search">
-                <button id="search-button">Search</button>
-            </div>
-            <script src="secondpage.js"></script>
-        </nav>
-    </div>
-    
 </body>
 </html>
