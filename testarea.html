@@ -3,174 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>About Us</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+    <title>Secondpage</title>
+    <link rel="stylesheet" href="secpage/secondpage.css">
+    <script>
+        function searchArticles() {
+            const searchInput = document.getElementById('search-bar').value.toLowerCase();
+            const articles = document.querySelectorAll('.article');
+
+            articles.forEach(article => {
+                const title = article.querySelector('a').textContent.toLowerCase();
+                const description = article.querySelector('p').textContent.toLowerCase();
+
+                if (title.includes(searchInput) || description.includes(searchInput)) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
         }
 
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
+        function filterByYear(year) {
+            const articles = document.querySelectorAll('.article');
+
+            articles.forEach(article => {
+                const description = article.querySelector('p').textContent;
+                const match = description.match(/\b\d{4}\b/); // Extract year from description
+                const articleYear = match ? parseInt(match[0]) : null;
+
+                if (articleYear && articleYear >= year) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
         }
 
-        .header h1 {
-            margin: 0;
-            color: rgb(9, 93, 204);
+        function searchCustomRange() {
+            const startYear = parseInt(document.getElementById('start-year').value);
+            const endYear = parseInt(document.getElementById('end-year').value);
+            const articles = document.querySelectorAll('.article');
+
+            articles.forEach(article => {
+                const description = article.querySelector('p').textContent;
+                const match = description.match(/\b\d{4}\b/); // Extract year from description
+                const articleYear = match ? parseInt(match[0]) : null;
+
+                if (articleYear && articleYear >= startYear && articleYear <= endYear) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
         }
 
-        .header .home {
-            position: absolute;
-            left: 20px;
-            padding: 10px 20px;
-            color: rgb(9, 93, 204);
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 25px;
+        function resetFilters() {
+            // Clear custom range inputs
+            document.getElementById('start-year').value = '';
+            document.getElementById('end-year').value = '';
+
+            // Clear search bar
+            document.getElementById('search-bar').value = '';
+
+            // Show all articles
+            const articles = document.querySelectorAll('.article');
+            articles.forEach(article => {
+                article.style.display = 'block';
+            });
         }
 
-        .container {
-            width: 70%;
-            margin: 0 auto;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        function sortBy(criteria) {
+            const container = document.querySelector('.container');
+            const articles = Array.from(document.querySelectorAll('.article'));
 
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: rgb(9, 93, 204);
-            margin-bottom: 30px;
-            margin-top: 5px;
-        }
+            articles.sort((a, b) => {
+                if (criteria === 'date') {
+                    const yearA = parseInt(a.querySelector('p').textContent.match(/\b\d{4}\b/)[0]);
+                    const yearB = parseInt(b.querySelector('p').textContent.match(/\b\d{4}\b/)[0]);
+                    return yearB - yearA; // Sort by descending year
+                } else if (criteria === 'relevance') {
+                    return a.querySelector('a').textContent.localeCompare(b.querySelector('a').textContent);
+                }
+            });
 
-        .profile {
-            background: #fff;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 100px;
-            box-shadow: 0 6px 8px rgba(10, 25, 230, 0.459); 
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
+            // Clear and re-append sorted articles
+            articles.forEach(article => container.appendChild(article));
         }
-
-        .profile img {
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-
-        .profile h2 {
-            margin: 0;
-        }
-
-        .profile p {
-            margin: 5px 0;
-        }
-
-        .social-icons a {
-            width: 24px;
-            size: 24px;
-            margin-right: 10px;
-            margin-left: 10px;
-            color: blue;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="header">
-        <a href="index.html" class="home">Home</a>
-        <h1>About Us</h1>
+    <div class="header"> <a href="../Index.html">PSUTracer</a></div>
+    <div class="profile-container">
+        <div class="profile-icon" onclick="toggleDropdown()">P</div>
+        <div class="dropdown-menu" id="dropdown-menu">
+            <a href="#">Bookmark</a>
+            <a href="#">Settings</a>
+        </div>
     </div>
-    
+    <div class="sidebar">
+        <h3>Filters</h3>
+        <ul>
+            <li><a href="#" onclick="filterByYear(2015)">Since 2015</a></li>
+            <li><a href="#" onclick="filterByYear(2014)">Since 2014</a></li>
+            <li><a href="#" onclick="filterByYear(2011)">Since 2011</a></li>
+        </ul>
+        <h3>Custom range</h3>
+        <div class="custom-range">
+            <label for="start-year">From:</label>
+            <input type="number" id="start-year" placeholder="YYYY">
+            <label for="end-year">To:</label>
+            <input type="number" id="end-year" placeholder="YYYY">
+            <button onclick="searchCustomRange()">Search</button>
+        </div>
+        <button onclick="resetFilters()">Reset</button> <!-- Reset button -->
+        <h3>Sort by</h3>
+        <ul>
+            <li><a href="#" onclick="sortBy('relevance')">Relevance</a></li>
+            <li><a href="#" onclick="sortBy('date')">Date</a></li>
+        </ul>
+    </div>
     <div class="container">
-        <div class="profile">
-            <img src="hazell.jpg" alt="Person 1" width="100">
-            <div>
-                <h2>Hazel Grace Aspirin</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quod quas maxime dolore optio id corrupti suscipit quibusdam nostrum
-                    quisquam tempora voluptatem ipsum fuga repudiandae, culpa odit dignissimos 
-                    distinctio, eveniet ab.
-                </p>
-                <div class="social-icons">
-                    <a href="#"><i class='bx bxl-facebook'></i></a>
-                    <a href="#"><i class='bx bxl-instagram' ></i></a>
-                    <a href="#"><i class='bx bxl-gmail' ></i></a>
-                    <a href="#"><i class='bx bxl-github'></i></a>
-                </div>
-            </div>
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search PSU Article" oninput="searchArticles()">
+        <div class="article">
+            <a href="#">Artificial Intelligence in Medicine</a>
+            <p>J Holmes, L Sacchi, R Bellazzi - Ann R Coll Surg Engl, 2004 - Springer</p>
         </div>
-
-        <div class="profile">
-            <img src="ham.jpg" alt="Person 2" width="100">
-            <div>
-                <h2>Laurence Ham Catalan</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quod quas maxime dolore optio id corrupti suscipit quibusdam nostrum
-                    quisquam tempora voluptatem ipsum fuga repudiandae, culpa odit dignissimos 
-                    distinctio, eveniet ab.
-                </p>
-                <div class="social-icons">
-                    <a href="#"><i class='bx bxl-facebook'></i></a>
-                    <a href="#"><i class='bx bxl-instagram' ></i></a>
-                    <a href="#"><i class='bx bxl-gmail' ></i></a>
-                    <a href="#"><i class='bx bxl-github'></i></a>
-                </div>
-            </div>
+        <div class="article">
+            <a href="#">Quo vadis artificial intelligence?</a>
+            <p>Y Jiang, X Li, H Luo, S Yin, O Kaynak - Discover AI, 2022 - Springer</p>
         </div>
-
-        <div class="profile">
-            <img src="roy.jpg" alt="Person 3" width="100">
-            <div>
-                <h2>Roy Mendoza</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quod quas maxime dolore optio id corrupti suscipit quibusdam nostrum
-                    quisquam tempora voluptatem ipsum fuga repudiandae, culpa odit dignissimos 
-                    distinctio, eveniet ab.
-                </p>
-                <div class="social-icons">
-                    <a href="#"><i class='bx bxl-facebook'></i></a>
-                    <a href="#"><i class='bx bxl-instagram' ></i></a>
-                    <a href="#"><i class='bx bxl-gmail' ></i></a>
-                    <a href="#"><i class='bx bxl-github'></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile">
-            <img src="dex.jpg" alt="Person 4" width="100">
-            <div>
-                <h2>Dexter Valencia</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quod quas maxime dolore optio id corrupti suscipit quibusdam nostrum
-                    quisquam tempora voluptatem ipsum fuga repudiandae, culpa odit dignissimos 
-                    distinctio, eveniet ab.
-                </p>
-                <div class="social-icons">
-                    <a href="#"><i class='bx bxl-facebook'></i></a>
-                    <a href="#"><i class='bx bxl-instagram' ></i></a>
-                    <a href="#"><i class='bx bxl-gmail' ></i></a>
-                    <a href="#"><i class='bx bxl-github'></i></a>
-                </div>
-            </div>
+        <div class="article">
+            <a href="#">What is artificial intelligence?</a>
+            <p>JH Fetzer - Artificial Intelligence: Its scope and limits, 1990 - Springer</p>
         </div>
     </div>
 </body>
